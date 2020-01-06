@@ -1,0 +1,24 @@
+[Unit]
+Description=connekt-smtp
+Documentation=https://github.com/kingster/connekt-smtp
+Wants=network-online.target systemd-networkd-wait-online.service
+
+[Service]
+EnvironmentFile=/etc/default/csmtp
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+ExecStart=/usr/sbin/csmtp /etc/csmtp/credentials.txt
+Restart=on-abnormal
+; restrictions
+PrivateDevices=true
+PrivateTmp=true
+ProtectSystem=full
+ReadOnlyDirectories=/etc/csmtp
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
+
+; See: man systemd.exec or systemd.directives
+
+; vim: set syntax=systemd:
