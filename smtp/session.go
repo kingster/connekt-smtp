@@ -120,7 +120,7 @@ func (s *Session) Data(r io.Reader) error {
 		}
 
 		//s.Dump() //debug
-		connekt.SendEmail(ConnektEmailRequest(s))
+		return connekt.SendEmail(ConnektEmailRequest(s))
 
 	}
 	return nil

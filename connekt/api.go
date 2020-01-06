@@ -12,12 +12,12 @@ import (
 var apiEndpoint = os.Getenv("API_ENDPOINT")
 var apiKey = os.Getenv("API_KEY")
 
-func SendEmail(request ConnektEmailRequest) {
+func SendEmail(request ConnektEmailRequest) error {
 
 	b, err := json.Marshal(request)
 	if err != nil {
 		fmt.Printf("Error: %s", err)
-		return
+		return err
 	}
 
 	req, err := http.NewRequest("POST", apiEndpoint, bytes.NewBuffer(b))
@@ -32,8 +32,8 @@ func SendEmail(request ConnektEmailRequest) {
 	defer resp.Body.Close()
 
 	fmt.Println("Send Email Status:", resp.Status)
-	//fmt.Println("response Headers:", resp.Header)
 	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println("Send Email Response:", string(body))
 
 	//var jsonResp ConnektResponse
 	//err = json.Unmarshal(body, &jsonResp)
@@ -41,7 +41,9 @@ func SendEmail(request ConnektEmailRequest) {
 	//	fmt.Println("Response Deserlize Error", err)
 	//}
 
-	fmt.Println("Send Email Response:", string(body))
+	if resp.StatusCode /100 != 2 {
+		return fmt.Errorf("Non2XX from Connekt")
+	}
 
-
+	return nil
 }
