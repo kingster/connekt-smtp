@@ -1,7 +1,9 @@
 package connekt
 
 import (
+	"fmt"
 	"github.com/emersion/go-message/mail"
+	"strings"
 )
 
 type ConnektAttachment struct {
@@ -58,3 +60,14 @@ func SMTPEmailAddress(ad *mail.Address) ConnektEmailAddress  {
 	}
 }
 
+const HTMLTemplate = `<html>
+<head>
+</head>
+<body>
+	<p>%s</p>
+</body>
+</html>`
+
+func Text2Html(s string) string {
+	return fmt.Sprintf(HTMLTemplate, strings.ReplaceAll(s, "\n", "<br>"))
+}

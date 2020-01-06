@@ -13,7 +13,7 @@ func (bkd *Backend) Login(state *smtp.ConnectionState, username, password string
 	if username != "username" || password != "password" {
 		return nil, errors.New("Invalid username or password")
 	}
-	return &SMTPSession{}, nil
+	return &Session{}, nil
 }
 
 // AnonymousLogin requires clients to authenticate using SMTP AUTH before sending emails

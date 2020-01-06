@@ -2,7 +2,6 @@ package smtp
 
 import (
 	"bytes"
-	"encoding/base64"
 	"github.com/emersion/go-message/mail"
 	"github.com/emersion/go-smtp"
 	"github.com/kingster/connekt-smtp/connekt"
@@ -19,7 +18,7 @@ type Attachment struct {
 }
 
 // A SMTPSession is returned after successful login.
-type SMTPSession struct {
+type Session struct {
 	From        *mail.Address
 	To          []*mail.Address
 	CC          []*mail.Address
@@ -30,51 +29,18 @@ type SMTPSession struct {
 	Attachments []Attachment
 }
 
-func SMTPAttachment(a Attachment) connekt.ConnektAttachment  {
-	return connekt.ConnektAttachment{
-		Base64Data: base64.StdEncoding.EncodeToString(a.Data),
-		Name:       a.FileName,
-		Mime:       a.ContentType,
-	}
-}
-
-func SMTPEmailRequest(s *SMTPSession) connekt.ConnektEmailRequest {
-	rq := connekt.CreateEmailRequest()
-
-
-	for _, addr := range s.To {
-		rq.ChannelInfo.To = append(rq.ChannelInfo.To, connekt.SMTPEmailAddress(addr))
-	}
-	for _, addr := range s.CC {
-		rq.ChannelInfo.CC = append(rq.ChannelInfo.CC, connekt.SMTPEmailAddress(addr))
-	}
-	rq.ChannelInfo.From = connekt.SMTPEmailAddress(s.From)
-	rq.ChannelData.Text = s.Text
-	rq.ChannelData.Subject = s.Subject
-	if len(s.HTML) > 0 {
-		rq.ChannelData.HTML = s.HTML
-	}
-
-	for _, attachment := range s.Attachments {
-		rq.ChannelData.Attachments = append(rq.ChannelData.Attachments, SMTPAttachment(attachment))
-	}
-
-	return rq
-}
-
-
-func (s *SMTPSession) Mail(from string, opts smtp.MailOptions) error {
+func (s *Session) Mail(from string, opts smtp.MailOptions) error {
 	// log.Println("Mail from:", from)
 	s.From = &mail.Address{Address: from}
 	return nil
 }
 
-func (s *SMTPSession) Rcpt(to string) error {
+func (s *Session) Rcpt(to string) error {
 	s.To = append(s.To, &mail.Address{Address: to})
 	return nil
 }
 
-func (s *SMTPSession) Dump() {
+func (s *Session) Dump() {
 	log.Println("------------ Dump Email ---------")
 
 	log.Println("Date:", s.Date)
@@ -93,13 +59,11 @@ func (s *SMTPSession) Dump() {
 	log.Println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
 }
 
-func (s *SMTPSession) Data(r io.Reader) error {
+func (s *Session) Data(r io.Reader) error {
 	if b, err := ioutil.ReadAll(r); err != nil {
 		return err
 	} else {
-
 		mr, _ := mail.CreateReader(bytes.NewReader(b))
-
 		header := mr.Header
 		if date, err := header.Date(); err == nil {
 			s.Date = date
@@ -110,15 +74,12 @@ func (s *SMTPSession) Data(r io.Reader) error {
 		if to, err := header.AddressList("To"); err == nil {
 			s.To = to
 		}
-
 		if cc, err := header.AddressList("CC"); err == nil {
 			s.CC = cc
 		}
-
 		if subject, err := header.Subject(); err == nil {
 			s.Subject = subject
 		}
-
 		// Process each message's part
 		for {
 			p, err := mr.NextPart()
@@ -159,14 +120,14 @@ func (s *SMTPSession) Data(r io.Reader) error {
 		}
 
 		//s.Dump() //debug
-		connekt.SendEmail(SMTPEmailRequest(s))
+		connekt.SendEmail(ConnektEmailRequest(s))
 
 	}
 	return nil
 }
 
-func (s *SMTPSession) Reset() {}
+func (s *Session) Reset() {}
 
-func (s *SMTPSession) Logout() error {
+func (s *Session) Logout() error {
 	return nil
 }
