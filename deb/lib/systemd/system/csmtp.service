@@ -13,12 +13,7 @@ Restart=on-abnormal
 PrivateDevices=true
 PrivateTmp=true
 ProtectSystem=full
-ReadOnlyDirectories=/etc/csmtp
 NoNewPrivileges=true
 
 [Install]
 WantedBy=multi-user.target
-
-; See: man systemd.exec or systemd.directives
-
-; vim: set syntax=systemd:

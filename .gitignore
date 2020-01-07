@@ -3,3 +3,4 @@
 /connekt-smtp
 /deb/usr/sbin/*
 *.deb
+.DS_Store

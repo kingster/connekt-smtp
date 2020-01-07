@@ -4,6 +4,7 @@ import (
 	"github.com/emersion/go-smtp"
 	csmtp "github.com/kingster/connekt-smtp/smtp"
 	"log"
+	"os"
 	"time"
 )
 
@@ -11,7 +12,12 @@ func main() {
 	be := &csmtp.Backend{}
 	s := smtp.NewServer(be)
 
-	s.Addr = ":1025"
+	bindAddr := os.Getenv("ADDR")
+	if bindAddr == "" {
+		bindAddr = ":25"
+	}
+
+	s.Addr = bindAddr
 	s.Domain = "localhost"
 	s.ReadTimeout = 10 * time.Second
 	s.WriteTimeout = 10 * time.Second
