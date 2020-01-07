@@ -45,6 +45,16 @@ type ConnektResponse struct {
 	} `json:"response"`
 }
 
+type ConnektErrorResponse struct {
+	Status   int         `json:"status"`
+	Request  interface{} `json:"request"`
+	Response struct {
+		Type    string      `json:"type"`
+		Message string      `json:"message"`
+		Data    interface{} `json:"data"`
+	} `json:"response"`
+}
+
 func CreateEmailRequest() ConnektEmailRequest {
 	rq := ConnektEmailRequest{}
 	rq.ChannelInfo.Type = "EMAIL"

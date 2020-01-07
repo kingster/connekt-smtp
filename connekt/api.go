@@ -42,7 +42,12 @@ func SendEmail(request ConnektEmailRequest) error {
 	//}
 
 	if resp.StatusCode /100 != 2 {
-		return fmt.Errorf("Non2XX from Connekt")
+		var cerr ConnektErrorResponse
+		err = json.Unmarshal(body, &cerr)
+		if err != nil {
+			return fmt.Errorf("Non2XX[%d] from Connekt", resp.StatusCode)
+		}
+		return fmt.Errorf("Non2XX[%d] from Connekt: %s", resp.StatusCode, cerr.Response.Message)
 	}
 
 	return nil
