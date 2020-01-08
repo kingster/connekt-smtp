@@ -18,7 +18,7 @@ func main() {
 	}
 
 	s.Addr = bindAddr
-	s.Domain = "localhost"
+	s.Domain = "connekt.flipkart.net"
 	s.ReadTimeout = 10 * time.Second
 	s.WriteTimeout = 10 * time.Second
 	s.MaxMessageBytes = 1024 * 1024

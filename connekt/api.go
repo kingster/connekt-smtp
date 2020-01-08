@@ -10,9 +10,8 @@ import (
 )
 
 var apiEndpoint = os.Getenv("API_ENDPOINT")
-var apiKey = os.Getenv("API_KEY")
 
-func SendEmail(request ConnektEmailRequest) error {
+func SendEmail(request ConnektEmailRequest, apiKey string) error {
 
 	b, err := json.Marshal(request)
 	if err != nil {

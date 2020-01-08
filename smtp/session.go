@@ -19,6 +19,7 @@ type Attachment struct {
 
 // A SMTPSession is returned after successful login.
 type Session struct {
+	APIKey	string
 	From        *mail.Address
 	To          []*mail.Address
 	CC          []*mail.Address
@@ -120,7 +121,7 @@ func (s *Session) Data(r io.Reader) error {
 		}
 
 		//s.Dump() //debug
-		return connekt.SendEmail(ConnektEmailRequest(s))
+		return connekt.SendEmail(ConnektEmailRequest(s), s.APIKey)
 
 	}
 	return nil
