@@ -5,7 +5,7 @@ import (
 	"github.com/kingster/connekt-smtp/connekt"
 )
 
-func ConnektAttachment(a Attachment) connekt.ConnektAttachment  {
+func ConnektAttachment(a Attachment) connekt.ConnektAttachment {
 	return connekt.ConnektAttachment{
 		Base64Data: base64.StdEncoding.EncodeToString(a.Data),
 		Name:       a.FileName,
@@ -36,4 +36,3 @@ func ConnektEmailRequest(s *Session) connekt.ConnektEmailRequest {
 
 	return rq
 }
-

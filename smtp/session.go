@@ -2,6 +2,7 @@ package smtp
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/emersion/go-message/mail"
 	"github.com/emersion/go-smtp"
 	"github.com/kingster/connekt-smtp/connekt"
@@ -19,7 +20,7 @@ type Attachment struct {
 
 // A SMTPSession is returned after successful login.
 type Session struct {
-	APIKey	string
+	APIKey      string
 	From        *mail.Address
 	To          []*mail.Address
 	CC          []*mail.Address
@@ -121,7 +122,16 @@ func (s *Session) Data(r io.Reader) error {
 		}
 
 		//s.Dump() //debug
-		return connekt.SendEmail(ConnektEmailRequest(s), s.APIKey)
+		id, err := connekt.SendEmail(ConnektEmailRequest(s), s.APIKey)
+		if err != nil {
+			return err
+		} else {
+			return &smtp.SMTPError{
+				Code:         250,
+				EnhancedCode: smtp.EnhancedCode{2, 0, 0},
+				Message:      fmt.Sprintf("Accepted %s - cstmp", id),
+			}
+		}
 
 	}
 	return nil

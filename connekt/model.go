@@ -18,7 +18,7 @@ type ConnektEmailAddress struct {
 }
 
 type ConnektEmailRequest struct {
-	SLA string `json:"sla"`
+	SLA         string `json:"sla"`
 	ChannelData struct {
 		Type        string              `json:"type"`
 		Subject     string              `json:"subject"`
@@ -38,10 +38,10 @@ type ConnektResponse struct {
 	Status   int         `json:"status"`
 	Request  interface{} `json:"request"`
 	Response struct {
-		Type    string `json:"type"`
-		Message string `json:"message"`
+		Type    string                 `json:"type"`
+		Message string                 `json:"message"`
 		Success map[string]interface{} `json:"success"`
-		Failure []interface{} `json:"failure"`
+		Failure []interface{}          `json:"failure"`
 	} `json:"response"`
 }
 
@@ -63,10 +63,10 @@ func CreateEmailRequest() ConnektEmailRequest {
 	return rq
 }
 
-func SMTPEmailAddress(ad *mail.Address) ConnektEmailAddress  {
+func SMTPEmailAddress(ad *mail.Address) ConnektEmailAddress {
 	return ConnektEmailAddress{
-		Name: ad.Name,
-		Address:ad.Address,
+		Name:    ad.Name,
+		Address: ad.Address,
 	}
 }
 
