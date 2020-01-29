@@ -10,19 +10,19 @@ import (
 )
 
 var apiEndpoint = os.Getenv("API_ENDPOINT")
+var apiUrl = apiEndpoint + "/v1/send/email/"
 
 var httpClient http.Client = http.Client{}
 
-func SendEmail(request ConnektEmailRequest, apiKey string) (string, error) {
+func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (string, error) {
 	messageId := ""
-
 	b, err := json.Marshal(request)
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 		return messageId, err
 	}
 
-	req, err := http.NewRequest("POST", apiEndpoint, bytes.NewBuffer(b))
+	req, err := http.NewRequest("POST", apiUrl+appName, bytes.NewBuffer(b))
 	req.Header.Set("x-api-key", apiKey)
 	req.Header.Set("Content-Type", "application/json")
 

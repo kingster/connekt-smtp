@@ -14,7 +14,7 @@ func main() {
 
 	bindAddr := os.Getenv("ADDR")
 	if bindAddr == "" {
-		bindAddr = ":25"
+		bindAddr = "0.0.0.0:25"
 	}
 
 	s.Addr = bindAddr
