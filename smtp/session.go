@@ -125,7 +125,11 @@ func (s *Session) Data(r io.Reader) error {
 		//s.Dump() //debug
 		id, err := connekt.SendEmail(ConnektEmailRequest(s), s.AppName, s.APIKey)
 		if err != nil {
-			return err
+			return &smtp.SMTPError{
+				Code:         421,
+				EnhancedCode: smtp.EnhancedCode{4, 2, 1},
+				Message:      "Error: transaction failed, blame it on connekt: " + err.Error(),
+			}
 		} else {
 			return &smtp.SMTPError{
 				Code:         250,
