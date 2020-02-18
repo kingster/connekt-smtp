@@ -14,6 +14,9 @@ PrivateDevices=true
 PrivateTmp=true
 ProtectSystem=full
 NoNewPrivileges=true
+StandardOutput=append:/var/log/connekt-smtp.log
+StandardError=inherit
+
 
 [Install]
 WantedBy=multi-user.target

@@ -11,6 +11,7 @@ fpm --force \
   --version "1.$VERSION"\
   --name connekt-smtp\
   --architecture amd64\
+  --depends "systemd (>= 240-1~)" \
   --prefix /\
   --description 'An SMTP interface for Connekt'\
   --url "https://github.com/kingster/connekt-smtp"\
