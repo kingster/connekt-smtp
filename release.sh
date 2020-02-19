@@ -24,6 +24,7 @@ fpm --force --verbose \
   --chdir package/deb \
   --no-deb-systemd-restart-after-upgrade\
   --after-install $PWD/package/DEBIAN/postinst \
+  --exclude ".DS_Store" \
   --package connekt-smtp.deb .
 
 dpkg -c connekt-smtp.deb
