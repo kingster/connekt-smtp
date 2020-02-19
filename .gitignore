@@ -2,6 +2,6 @@
 *.iml
 /csmtp
 /connekt-smtp
-/deb/usr/sbin/*
+/package/deb/usr/sbin/*
 *.deb
 .DS_Store

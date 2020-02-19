@@ -1,10 +1,15 @@
-#!/bin/bash -x
+#!/bin/bash -ex
 
 VERSION=$(date +%s)
-mkdir -p deb/usr/sbin
 GOOS=linux GOARCH=386 go build -o csmtp main.go
-cp csmtp deb/usr/sbin/csmtp
-fpm --force \
+
+
+mkdir -p package/deb/usr/sbin
+cp csmtp package/deb/usr/sbin/csmtp
+
+PWD=`pwd`
+
+fpm --force --verbose \
   --input-type dir\
   --output-type deb\
   --config-files /etc/default/csmtp \
@@ -12,9 +17,13 @@ fpm --force \
   --name connekt-smtp\
   --architecture amd64\
   --depends "systemd (>= 240-1~)" \
-  --prefix /\
+  --prefix / \
   --description 'An SMTP interface for Connekt'\
   --url "https://github.com/kingster/connekt-smtp"\
+  --maintainer "Kinshuk <hi@kinsh.uk>" \
+  --chdir package/deb \
   --no-deb-systemd-restart-after-upgrade\
-  --chdir deb \
-  --package connekt-smtp.deb
+  --after-install $PWD/package/DEBIAN/postinst \
+  --package connekt-smtp.deb .
+
+dpkg -c connekt-smtp.deb
