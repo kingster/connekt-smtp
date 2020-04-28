@@ -13,7 +13,7 @@ After that you can do a normal installation
 
 ```
 # if installing directly via deb
-dpkg -i connekt-smtp.deb 
+apt install ./connekt-smtp.deb
 
 # or via any repo
 apt install connekt-smtp
