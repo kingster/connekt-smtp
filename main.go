@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/emersion/go-smtp"
-	csmtp "github.com/kingster/connekt-smtp/smtp"
 	"log"
 	"os"
 	"time"
+
+	"github.com/emersion/go-smtp"
+	csmtp "github.com/kingster/connekt-smtp/smtp"
 )
 
 func main() {
@@ -25,6 +26,7 @@ func main() {
 	s.MaxRecipients = 50
 	s.AllowInsecureAuth = true
 
+	log.SetFlags(log.LstdFlags)
 	log.Println("Starting server at", s.Addr)
 	if err := s.ListenAndServe(); err != nil {
 		log.Fatal(err)

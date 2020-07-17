@@ -1,0 +1,10 @@
+/var/log/connekt-smtp.log {
+    rotate 5
+    copytruncate
+    missingok
+    notifempty
+    delaycompress
+    maxsize 500M
+    daily
+    create 0644 root root
+}

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 )
@@ -18,7 +19,7 @@ func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (stri
 	messageId := ""
 	b, err := json.Marshal(request)
 	if err != nil {
-		fmt.Printf("Error: %s", err)
+		log.Printf("Error: %s", err)
 		return messageId, err
 	}
 
@@ -28,13 +29,14 @@ func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (stri
 
 	resp, err := httpClient.Do(req)
 	if err != nil {
-		fmt.Println("Send Request Error", err)
+		log.Println("Send Request Error", err)
+		return messageId, fmt.Errorf("Failed to Send Request to Connekt: %s", err)
 	}
 	defer resp.Body.Close()
 
-	fmt.Println("Send Email Status:", resp.Status)
+	log.Println("Send Email Status:", resp.Status)
 	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println("Send Email Response:", string(body))
+	log.Println("Send Email Response:", string(body))
 
 	if resp.StatusCode/100 != 2 {
 		var cerr ConnektErrorResponse
@@ -47,7 +49,7 @@ func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (stri
 		var jsonResp ConnektResponse
 		err = json.Unmarshal(body, &jsonResp)
 		if err != nil {
-			fmt.Println("Response Deserialize Error", err)
+			log.Println("Response Deserialize Error", err)
 			return messageId, nil // its okay, just json error
 		}
 		for k, _ := range jsonResp.Response.Success {
