@@ -41,7 +41,7 @@ type ConnektResponse struct {
 		Type    string                 `json:"type"`
 		Message string                 `json:"message"`
 		Success map[string]interface{} `json:"success"`
-		Failure []interface{}          `json:"failure"`
+		Failure interface{}          `json:"failure"`
 	} `json:"response"`
 }
 

@@ -11,7 +11,7 @@ import (
 )
 
 var apiEndpoint = os.Getenv("API_ENDPOINT")
-var apiUrl = apiEndpoint + "/v1/send/email/"
+var apiUrl = apiEndpoint + "/v2/send/email/"
 
 var httpClient http.Client = http.Client{}
 
@@ -29,7 +29,7 @@ func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (stri
 
 	resp, err := httpClient.Do(req)
 	if err != nil {
-		log.Println("Send Request Error", err)
+		log.Println("Send Request Error", err, "Request: ", string(b))
 		return messageId, fmt.Errorf("Failed to Send Request to Connekt: %s", err)
 	}
 	defer resp.Body.Close()
