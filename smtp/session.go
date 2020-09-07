@@ -3,13 +3,14 @@ package smtp
 import (
 	"bytes"
 	"fmt"
-	"github.com/emersion/go-message/mail"
-	"github.com/emersion/go-smtp"
-	"github.com/kingster/connekt-smtp/connekt"
 	"io"
 	"io/ioutil"
 	"log"
 	"time"
+
+	"github.com/emersion/go-message/mail"
+	"github.com/emersion/go-smtp"
+	"github.com/kingster/connekt-smtp/connekt"
 )
 
 type Attachment struct {
@@ -66,7 +67,12 @@ func (s *Session) Data(r io.Reader) error {
 	if b, err := ioutil.ReadAll(r); err != nil {
 		return err
 	} else {
-		mr, _ := mail.CreateReader(bytes.NewReader(b))
+		mr, err := mail.CreateReader(bytes.NewReader(b))
+		if err != nil {
+			log.Println("ERROR", err)
+			return err
+		}
+
 		header := mr.Header
 		if date, err := header.Date(); err == nil {
 			s.Date = date
@@ -89,7 +95,8 @@ func (s *Session) Data(r io.Reader) error {
 			if err == io.EOF {
 				break
 			} else if err != nil {
-				log.Fatal(err)
+				log.Println("ERROR", err)
+				return err
 			}
 
 			switch h := p.Header.(type) {
