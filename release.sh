@@ -3,7 +3,7 @@
 VERSION=$(date +%s)
 export GOOS=linux 
 export GOARCH=386 
-go build -ldflags "-X main.Enviroment=Production" -o csmtp main.go
+go build -ldflags "-X main.Environment=Production" -o csmtp main.go
 
 PWD=`pwd`
 
