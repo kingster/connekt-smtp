@@ -8,12 +8,15 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 var apiEndpoint = os.Getenv("API_ENDPOINT")
 var apiUrl = apiEndpoint + "/v2/send/email/"
 
-var httpClient http.Client = http.Client{}
+var httpClient http.Client = http.Client{
+	Timeout: 10 * time.Second,
+}
 
 func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (string, error) {
 	messageId := ""
