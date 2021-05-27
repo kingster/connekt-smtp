@@ -68,14 +68,18 @@ message.attach(part)
 subject = 'Connekt SMTP Client'
 message['Subject'] = Header(subject, 'utf-8')
 
-try:
-    smtpObj = smtplib.SMTP() 
-    smtpObj.connect("localhost", 1025) 
-    smtpObj.login("username","password")
+with smtplib.SMTP("localhost:1025") as smtp:
+  try:
+      smtp.set_debuglevel(2)
+      # smtp.connect("localhost", 1025)
+      smtp.starttls() 
 
-    smtpObj.sendmail(sender, receivers, message.as_string())
-    print ("Email Sent")
+      smtp.login("username","password")
 
-except smtplib.SMTPException as e:
-    print(e)
-    print ("Error: Send Exception")
+      smtp.sendmail(sender, receivers, message.as_string())
+      print ("Email Sent")
+
+  except smtplib.SMTPException as e:
+      print(e)
+      print ("Error: Send Exception")
+
