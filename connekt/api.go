@@ -18,12 +18,18 @@ var httpClient http.Client = http.Client{
 	Timeout: 10 * time.Second,
 }
 
-func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (string, error) {
-	messageId := ""
+type SendMailResult struct {
+	Status       int
+	MessageId    string
+	ErrorMessage string
+}
+
+func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (*SendMailResult, error) {
+	result := &SendMailResult{}
 	b, err := json.Marshal(request)
 	if err != nil {
 		log.Printf("Error: %s", err)
-		return messageId, err
+		return result, err
 	}
 
 	req, err := http.NewRequest("POST", apiUrl+appName, bytes.NewBuffer(b))
@@ -33,7 +39,7 @@ func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (stri
 	resp, err := httpClient.Do(req)
 	if err != nil {
 		log.Println("Send Request Error", err, "Request: ", string(b))
-		return messageId, fmt.Errorf("Failed to Send Request to Connekt: %s", err)
+		return result, fmt.Errorf("Failed to Send Request to Connekt: %s", err)
 	}
 	defer resp.Body.Close()
 
@@ -45,21 +51,23 @@ func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (stri
 		var cerr ConnektErrorResponse
 		err = json.Unmarshal(body, &cerr)
 		if err != nil {
-			return messageId, fmt.Errorf("Non2XX[%d] from Connekt", resp.StatusCode)
+			return result, fmt.Errorf("Non2XX[%d] from Connekt", resp.StatusCode)
+		} else {
+			result.ErrorMessage = cerr.Response.Message
 		}
-		return messageId, fmt.Errorf("Non2XX[%d] from Connekt: %s", resp.StatusCode, cerr.Response.Message)
+		return result, fmt.Errorf("Non2XX[%d] from Connekt: %s", resp.StatusCode, cerr.Response.Message)
 	} else {
 		var jsonResp ConnektResponse
 		err = json.Unmarshal(body, &jsonResp)
 		if err != nil {
 			log.Println("Response Deserialize Error", err)
-			return messageId, nil // its okay, just json error
+			return result, nil // its okay, just json error
 		}
-		for k, _ := range jsonResp.Response.Success {
-			messageId = k
+		for k := range jsonResp.Response.Success {
+			result.MessageId = k
 			break
 		}
-		return messageId, nil
+		return result, nil
 	}
 
 }

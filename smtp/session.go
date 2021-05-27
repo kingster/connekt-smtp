@@ -130,18 +130,26 @@ func (s *Session) Data(r io.Reader) error {
 		}
 
 		//s.Dump() //debug
-		id, err := connekt.SendEmail(ConnektEmailRequest(s), s.AppName, s.APIKey)
+		result, err := connekt.SendEmail(ConnektEmailRequest(s), s.AppName, s.APIKey)
 		if err != nil {
-			return &smtp.SMTPError{
-				Code:         421,
-				EnhancedCode: smtp.EnhancedCode{4, 2, 1},
-				Message:      "Error: transaction failed, blame it on connekt: " + err.Error(),
+			if result.ErrorMessage == "No valid destinations found" {
+				return &smtp.SMTPError{
+					Code:         554,
+					EnhancedCode: smtp.EnhancedCode{5, 0, 0},
+					Message:      "Error: destination rejected by connekt: " + err.Error(),
+				}
+			} else {
+				return &smtp.SMTPError{
+					Code:         421,
+					EnhancedCode: smtp.EnhancedCode{4, 2, 1},
+					Message:      "Error: transaction failed, blame it on connekt: " + err.Error(),
+				}
 			}
 		} else {
 			return &smtp.SMTPError{
 				Code:         250,
 				EnhancedCode: smtp.EnhancedCode{2, 0, 0},
-				Message:      fmt.Sprintf("Accepted %s - cstmp", id),
+				Message:      fmt.Sprintf("Accepted %s - cstmp", result.MessageId),
 			}
 		}
 
