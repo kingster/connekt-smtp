@@ -16,7 +16,7 @@ func (bkd *Backend) Login(state *smtp.ConnectionState, username, password string
 	if username == "smtp" {
 		username = defaultConnektApp
 	}
-	log.Println("Connection from", state.RemoteAddr.String(), state.Hostname, "AppName: "+ username)
+	log.Println("Connection from", state.RemoteAddr.String(), state.Hostname, "AppName: "+username)
 	return &Session{APIKey: password, AppName: username}, nil
 }
 
