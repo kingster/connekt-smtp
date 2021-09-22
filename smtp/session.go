@@ -3,6 +3,7 @@ package smtp
 import (
 	"bytes"
 	"fmt"
+	"github.com/emersion/go-message"
 	"io"
 	"io/ioutil"
 	"log"
@@ -68,8 +69,8 @@ func (s *Session) Data(r io.Reader) error {
 		return err
 	} else {
 		mr, err := mail.CreateReader(bytes.NewReader(b))
-		if err != nil {
-			log.Println("ERROR", err)
+		if err != nil && !message.IsUnknownCharset(err) {
+			log.Println("ERROR Reading Mail Data", err)
 			return err
 		}
 
@@ -94,8 +95,8 @@ func (s *Session) Data(r io.Reader) error {
 			p, err := mr.NextPart()
 			if err == io.EOF {
 				break
-			} else if err != nil {
-				log.Println("ERROR", err)
+			} else if err != nil && !message.IsUnknownCharset(err) {
+				log.Println("ERROR Reading MailPart", err)
 				return err
 			}
 
