@@ -2,8 +2,9 @@ package connekt
 
 import (
 	"fmt"
-	"github.com/emersion/go-message/mail"
 	"strings"
+
+	"github.com/emersion/go-message/mail"
 )
 
 type ConnektAttachment struct {
@@ -27,11 +28,18 @@ type ConnektEmailRequest struct {
 		Attachments []ConnektAttachment `json:"attachments"`
 	} `json:"channelData"`
 	ChannelInfo struct {
-		Type string                `json:"type"`
-		To   []ConnektEmailAddress `json:"to"`
-		CC   []ConnektEmailAddress `json:"cc"`
-		From ConnektEmailAddress   `json:"from"`
+		Type    string                `json:"type"`
+		AppName string                `json:"appName"`
+		To      []ConnektEmailAddress `json:"to"`
+		CC      []ConnektEmailAddress `json:"cc"`
+		From    ConnektEmailAddress   `json:"from"`
 	} `json:"channelInfo"`
+
+	CommControllerConfig struct {
+		SkipVernac   bool `json:"skipVernac"`
+		SkipFCS      bool `json:"skipFCS"`
+		SkipCommPref bool `json:"skipCommPref"`
+	} `json:"commControllerConfig"`
 }
 
 type ConnektResponse struct {

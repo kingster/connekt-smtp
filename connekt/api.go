@@ -67,6 +67,7 @@ func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (*Sen
 			result.MessageId = k
 			break
 		}
+		result.Status = jsonResp.Status
 		return result, nil
 	}
 
