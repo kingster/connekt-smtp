@@ -26,7 +26,7 @@ You need to configure connekt endpoint and few other things
 open `/etc/default/csmtp` in your favorite editor and make changes as per your need
 
 ```
-API_ENDPOINT="http://127.0.0.1"
+API_ENDPOINT="http://127.0.0.1/v2/send/email/"
 DEFAULT_APP="outbound" 
 ADDR="0.0.0.0:25"
 ```

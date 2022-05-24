@@ -1,3 +1,3 @@
 API_ENDPOINT="http://127.0.0.1/v3/send/email/"
-DEFAULT_APP="flipkart"
+DEFAULT_APP="seller-vendor"
 ADDR="0.0.0.0:25"
