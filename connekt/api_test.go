@@ -6,6 +6,8 @@ import (
 
 func TestEmail(t *testing.T) {
 
+	apiEndpoint = "http://127.0.0.1/v3/send/email/"
+	apiKey := "your-api-key"
 
 	rq := CreateEmailRequest()
 	rq.ChannelInfo.To = append(rq.ChannelInfo.To, EmailAddress{
