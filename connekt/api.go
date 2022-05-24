@@ -12,7 +12,6 @@ import (
 )
 
 var apiEndpoint = os.Getenv("API_ENDPOINT")
-var apiUrl = apiEndpoint + "/v2/send/email/"
 
 var httpClient http.Client = http.Client{
 	Timeout: 10 * time.Second,
@@ -24,7 +23,7 @@ type SendMailResult struct {
 	ErrorMessage string
 }
 
-func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (*SendMailResult, error) {
+func SendEmail(request EmailRequest, appName string, apiKey string) (*SendMailResult, error) {
 	result := &SendMailResult{}
 	b, err := json.Marshal(request)
 	if err != nil {
@@ -32,7 +31,7 @@ func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (*Sen
 		return result, err
 	}
 
-	req, err := http.NewRequest("POST", apiUrl+appName, bytes.NewBuffer(b))
+	req, err := http.NewRequest("POST", apiEndpoint+appName, bytes.NewBuffer(b))
 	req.Header.Set("x-api-key", apiKey)
 	req.Header.Set("Content-Type", "application/json")
 
@@ -48,7 +47,8 @@ func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (*Sen
 	log.Println("Send Email Response:", string(body))
 
 	if resp.StatusCode/100 != 2 {
-		var cerr ConnektErrorResponse
+		log.Println("Failed Send Email Request:", string(b))
+		var cerr ErrorResponse
 		err = json.Unmarshal(body, &cerr)
 		if err != nil {
 			return result, fmt.Errorf("Non2XX[%d] from Connekt", resp.StatusCode)
@@ -57,7 +57,7 @@ func SendEmail(request ConnektEmailRequest, appName string, apiKey string) (*Sen
 		}
 		return result, fmt.Errorf("Non2XX[%d] from Connekt: %s", resp.StatusCode, cerr.Response.Message)
 	} else {
-		var jsonResp ConnektResponse
+		var jsonResp Response
 		err = json.Unmarshal(body, &jsonResp)
 		if err != nil {
 			log.Println("Response Deserialize Error", err)

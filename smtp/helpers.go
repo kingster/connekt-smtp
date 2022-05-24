@@ -5,15 +5,15 @@ import (
 	"github.com/kingster/connekt-smtp/connekt"
 )
 
-func ConnektAttachment(a Attachment) connekt.ConnektAttachment {
-	return connekt.ConnektAttachment{
+func ConnektAttachment(a Attachment) connekt.Attachment {
+	return connekt.Attachment{
 		Base64Data: base64.StdEncoding.EncodeToString(a.Data),
 		Name:       a.FileName,
 		Mime:       a.ContentType,
 	}
 }
 
-func ConnektEmailRequest(s *Session) connekt.ConnektEmailRequest {
+func ConnektEmailRequest(s *Session) connekt.EmailRequest {
 	rq := connekt.CreateEmailRequest()
 	for _, addr := range s.To {
 		rq.ChannelInfo.To = append(rq.ChannelInfo.To, connekt.SMTPEmailAddress(addr))

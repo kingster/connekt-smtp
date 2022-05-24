@@ -33,8 +33,8 @@ html = """\
 """
 
 # Record the MIME types of both parts - text/plain and text/html.
-part1 = MIMEText(text, 'plain')
-part2 = MIMEText(html, 'html')
+part1 = MIMEText(text, 'plain', 'euc_jp')
+part2 = MIMEText(html, 'html', 'ansi_x3.4-1968')
 
 # Attach parts into message container.
 # According to RFC 2046, the last part of a multipart message, in this case

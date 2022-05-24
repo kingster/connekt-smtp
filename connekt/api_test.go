@@ -8,12 +8,12 @@ func TestEmail(t *testing.T) {
 
 
 	rq := CreateEmailRequest()
-	rq.ChannelInfo.To = append(rq.ChannelInfo.To, ConnektEmailAddress{
+	rq.ChannelInfo.To = append(rq.ChannelInfo.To, EmailAddress{
 		Name:    "John Doe",
 		Address: "connekt@labworld.org",
 	})
 
-	rq.ChannelInfo.From = ConnektEmailAddress{
+	rq.ChannelInfo.From = EmailAddress{
 		Name:    "John Doe",
 		Address: "hello@labworld.org",
 	}
