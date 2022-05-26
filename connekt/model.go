@@ -2,39 +2,42 @@ package connekt
 
 import (
 	"fmt"
-	"github.com/emersion/go-message/mail"
 	"strings"
+
+	"github.com/emersion/go-message/mail"
 )
 
-type ConnektAttachment struct {
+//Attachment Defines a attachment for an email
+type Attachment struct {
 	Base64Data string `json:"base64Data"`
 	Name       string `json:"name"`
 	Mime       string `json:"mime"`
 }
 
-type ConnektEmailAddress struct {
+type EmailAddress struct {
 	Name    string `json:"name"`
 	Address string `json:"address"`
 }
 
-type ConnektEmailRequest struct {
+type EmailRequest struct {
 	SLA         string `json:"sla"`
 	ChannelData struct {
-		Type        string              `json:"type"`
-		Subject     string              `json:"subject"`
-		HTML        string              `json:"html"`
-		Text        string              `json:"text"`
-		Attachments []ConnektAttachment `json:"attachments"`
+		Type        string       `json:"type"`
+		Subject     string       `json:"subject"`
+		HTML        string       `json:"html"`
+		Text        string       `json:"text"`
+		Attachments []Attachment `json:"attachments"`
 	} `json:"channelData"`
 	ChannelInfo struct {
-		Type string                `json:"type"`
-		To   []ConnektEmailAddress `json:"to"`
-		CC   []ConnektEmailAddress `json:"cc"`
-		From ConnektEmailAddress   `json:"from"`
+		Type    string         `json:"type"`
+		AppName string         `json:"appName"`
+		To      []EmailAddress `json:"to"`
+		CC      []EmailAddress `json:"cc"`
+		From    EmailAddress   `json:"from"`
 	} `json:"channelInfo"`
 }
 
-type ConnektResponse struct {
+type Response struct {
 	Status   int         `json:"status"`
 	Request  interface{} `json:"request"`
 	Response struct {
@@ -45,7 +48,7 @@ type ConnektResponse struct {
 	} `json:"response"`
 }
 
-type ConnektErrorResponse struct {
+type ErrorResponse struct {
 	Status   int         `json:"status"`
 	Request  interface{} `json:"request"`
 	Response struct {
@@ -55,16 +58,16 @@ type ConnektErrorResponse struct {
 	} `json:"response"`
 }
 
-func CreateEmailRequest() ConnektEmailRequest {
-	rq := ConnektEmailRequest{}
+func CreateEmailRequest() EmailRequest {
+	rq := EmailRequest{}
 	rq.ChannelInfo.Type = "EMAIL"
 	rq.ChannelData.Type = "EMAIL"
 	rq.SLA = "H"
 	return rq
 }
 
-func SMTPEmailAddress(ad *mail.Address) ConnektEmailAddress {
-	return ConnektEmailAddress{
+func SMTPEmailAddress(ad *mail.Address) EmailAddress {
+	return EmailAddress{
 		Name:    ad.Name,
 		Address: ad.Address,
 	}

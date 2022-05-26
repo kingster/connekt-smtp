@@ -20,7 +20,7 @@ type Attachment struct {
 	Data        []byte
 }
 
-// A SMTPSession is returned after successful login.
+// A Session is returned after successful login.
 type Session struct {
 	AppName     string
 	APIKey      string
