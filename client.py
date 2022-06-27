@@ -9,14 +9,14 @@ from email.mime.multipart import MIMEMultipart
 from email.header import Header
 
 sender = 'random@flipkart.com'
-receivers = ['kinshuk.bairagi@flipkart.com', 'litmus@flipkart.com'] 
+receivers = ['your-email-address@gmail.com', 'litmus@flipkart.com'] 
 
 # message = MIMText('Python SMTP Email...', 'plain', 'utf-8')
 
 message = MIMEMultipart('alternative')
 message["From"] = sender
 message["To"] = ", ".join(receivers)
-# message["CC"] = "kinshuk1989@gmail.com"
+# message["CC"] = "hello@gmail.com"
 
 # Create the body of the message (a plain-text and an HTML version).
 text = "Hi!\nHow are you?\nHere is the link you wanted:\nhttp://www.python.org"
