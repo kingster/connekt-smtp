@@ -26,7 +26,7 @@ USER connekt-smtp
 WORKDIR /
 
 COPY --from=builder /app/csmtp  /csmtp
-COPY resources /var/lib/connekt-smtp/
+COPY resources/* /var/lib/connekt-smtp/
 
 EXPOSE 8025
 
